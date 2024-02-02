@@ -41,7 +41,7 @@
                     </button>
                 </form>
                 <teleport to='body'>
-                    <basic-modal :topPosition="modalPosition" :modalImg="'/src/assets/images/register-success.gif'" v-if="modalShow"></basic-modal>
+                    <basic-modal :topPosition="modalPosition" :modalImg="'/images/register-success.gif'" v-if="modalShow"></basic-modal>
                 </teleport>
             </div>
         </div>
