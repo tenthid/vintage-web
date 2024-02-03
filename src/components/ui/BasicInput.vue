@@ -5,7 +5,7 @@
             <!-- <input :type="type" :class="[{ 'd-block': isImage }, 'form-control' ]" class="d-none"> -->
         </label>
         <input
-        :class="[{ 'd-none': isPassword}, 'form-control' ]" 
+        :class="[{ 'd-none': isPassword}, 'form-control input-no-focus' ]" 
         :type="type"
         :placeholder="placeholder" 
         :readonly="readonly === '1'"
@@ -17,7 +17,7 @@
         <!-- if input use show control password-->
         <div class="input-group" :class="isPassword? 'd-flex' : 'd-none'">
             <input
-            class="form-control border-end-0" 
+            class="form-control border-end-0 input-no-focus" 
             :type="passIcon?'text' : 'password'"
             :id="identity" 
             :placeholder="placeholder" 

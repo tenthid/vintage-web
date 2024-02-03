@@ -25,6 +25,12 @@ nav {
   box-shadow: 0 0 0 0.25rem rgba(13, 107, 111, 0.25) !important;
 }
 
+.input-no-focus:focus {
+  border-color: lightgrey !important;
+  outline: none !important;
+  box-shadow: none !important;
+}
+
 .color-green-vintage {
   color:#0D6B6F !important;
 }
@@ -57,6 +63,11 @@ nav {
 }
 
 .page {
+  margin-top: 61px;
+  height: fit-content;
+}
+
+.page-height {
   margin-top: 61px;
   height: 100vh;
 }
@@ -115,10 +126,6 @@ nav {
   /* default iPad screens */
   nav {
     padding: 12px 50px;
-  }
-
-  .page {
-    height: fit-content;
   }
 }
 

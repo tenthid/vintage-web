@@ -8,13 +8,13 @@
                 <div class="d-flex justify-content-between mt-4">
                     <div class="d-flex gap-4">
                         <a href="https:/whatsapp.com" target="_blank">
-                            <img src="../../assets/images/whatsapp.svg" alt="whatsapp">
+                            <img src="/images/whatsapp.svg" alt="whatsapp">
                         </a>
                         <a href="https:/instagram.com" target="_blank">
-                            <img src="../../assets/images/instagram.svg" alt="instagram">
+                            <img src="/images/instagram.svg" alt="instagram">
                         </a>
                         <a href="https:/linkedin.com" target="_blank">
-                            <img src="../../assets/images/linkedin.svg" alt="linkedin">
+                            <img src="/images/linkedin.svg" alt="linkedin">
                         </a>
                     </div>
                     <p class="copyright-text">ⓒ Vintage, 2023</p>

@@ -14,7 +14,7 @@ export default {
 
     mutations: {
         setProductData(state, payload) {
-            state.products = payload
+            state.products = Object.values(payload)
         }
     },
 

@@ -1,7 +1,7 @@
 <template>
     <div class="mb-5">
         <h2 class="text-center text-sm-start">New Product</h2>
-        <items-list :products="productList">
+        <items-list :products="products">
             <router-link to="#" class="d-flex justify-content-center align-items-center text-decoration-none text-dark" style="background-color: #EBFEFF;">
                 <h5 style="color: #009499;" class="my-4">See All<br>New Product</h5>
             </router-link>
@@ -15,7 +15,7 @@
 
     const store = useStore()
 
-    const productList = store.state.product.products
+    const products = store.state.product.products
 </script>
 
 <style>

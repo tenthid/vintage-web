@@ -20,7 +20,7 @@
 
 <style scoped>
     #hero {
-        background: url('../../assets/images/home-bg.png') no-repeat; 
+        background: url('/images/home-bg.png') no-repeat; 
         background-size: 100% 100%; 
         height: 100vh;
         padding: 0px 120px;

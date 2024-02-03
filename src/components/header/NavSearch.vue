@@ -5,7 +5,7 @@
         </span>
         <input 
             type="text" 
-            class="form-control" 
+            class="form-control input-no-focus" 
             placeholder="Search for items" 
             style="border-left: 0px; padding-left: 0px;"
             v-model="item"
@@ -14,15 +14,40 @@
 </template>
 
 <script setup>
-    import { useRouter } from 'vue-router';
-    import { ref } from 'vue';
+    import { useRouter, useRoute } from 'vue-router';
+    import { ref, watch, onMounted } from 'vue';
 
     const router = useRouter()
+    const route = useRoute()
     const item = ref()
+    const searchParam = ref(route.query.search)
+    const brandParam = ref(route.query.brand)
+
+    watch(route, (newValue, oldValue) => {
+        searchParam.value = route.query.search
+        brandParam.value = route.query.brand
+        if (searchParam.value !== undefined && searchParam.value !== '') {
+            item.value = searchParam.value
+        } else {
+            item.value = ''
+        }
+    })
 
     const searchItem = () => {
-        router.push(`/product?search=${item.value}`)
+        if (brandParam.value !== undefined && brandParam.value !== '') {
+            router.push(`/product?brand=${brandParam.value}&search=${item.value}`)
+        } else {
+            router.push(`/product?search=${item.value}`)
+        }
     }
+
+    onMounted(() => {
+        if (searchParam.value !== undefined && searchParam.value !== '') {
+            item.value = searchParam.value
+        } else {
+            item.value = ''
+        }
+    })
 </script>
 
 <style>

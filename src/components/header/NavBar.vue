@@ -1,7 +1,7 @@
 <template>
     <nav class="justify-content-between justify-content-lg-none z-3" :style="{'justify-content': loginLayout? 'space-between' : 'none'}">
         <router-link to="/" class="logo text-decoration-none">
-            <img src="../../assets/images/logo.svg" alt="logo">
+            <img src="/images/logo.svg" alt="logo">
             <p class="logo-typography">Vintage</p>
         </router-link>
         <nav-search v-if="loginLayout === false" ></nav-search>
