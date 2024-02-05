@@ -31,9 +31,9 @@ const checkAuth = async () => {
 
 export const routes = [
     { path: '/', name: 'mainLayoutinHome', component: HomePage,
-        meta: {
-            layout: MainLayout
-        },
+        // meta: {
+        //     layout: MainLayout
+        // },
         beforeEnter: () => {
             checkAuth()
         }
