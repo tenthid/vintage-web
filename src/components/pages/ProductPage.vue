@@ -78,11 +78,13 @@
     }
 
     const resetSearchParam = () => {
-        if (brandParam.value !== undefined && brandParam.value !== '') {
-            router.push(`/product?brand=${brandParam.value}`)
-        } else {
-            router.push(`/product`)
-        }
+        // if (brandParam.value !== undefined && brandParam.value !== '') {
+        //     router.push(`/product?brand=${brandParam.value}`)
+        // } else {
+        //     router.push(`/product`)
+        // }
+        document.getElementById('searchInput').focus()
+        document.getElementById('searchInput').value = ''
     }
 
     onMounted(() => {

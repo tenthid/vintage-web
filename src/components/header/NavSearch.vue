@@ -3,7 +3,8 @@
         <span class="input-group-text" style="background-color: transparent;">
             <i @click="searchItem()" class="fa-solid fa-magnifying-glass"></i>
         </span>
-        <input 
+        <input
+            id="searchInput"
             type="text" 
             class="form-control input-no-focus" 
             placeholder="Search for items" 

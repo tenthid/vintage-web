@@ -16,15 +16,24 @@
             <input class="star" type="radio" id="star5" name="rating" value="5">
             <label class="star" for="star5"></label> -->
             <div class="row">
-                <div class="col-8">
+                <div class="col-12 col-lg-8">
                     <img :src="productDetail.image" alt="product image" width="100%" height="auto" class="mb-5">
-                    <h4 class="mb-1">Other Product</h4>
-                    <items-list :listType="'other'" :products="products" ></items-list>
+                    <div class="d-none d-lg-block">
+                        <h4 class="mb-1">Other Product</h4>
+                        <items-list :listType="'other'" :products="products" ></items-list>
+                    </div>
                 </div>
-                <div class="col-4">
+                <div class="col-12 col-lg-4">
                     <description-card :productDetail="productDetail"></description-card>
+                    <div class="d-block d-lg-none">
+                        <h4 class="mb-1 mt-5">Other Product</h4>
+                        <items-list :listType="'other'" :products="products" ></items-list>
+                    </div>
                 </div>
             </div>
+        </div>
+        <div v-else class="d-flex justify-content-center align-items-center" style="height: 92vh;">
+            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
     </div>
 </template>
@@ -41,7 +50,7 @@
     const store = useStore()
     const products = store.state.product.products
     
-    watch (route, (newValue, oldValue) => {
+    watch ( route, (newValue, oldValue) => {
         detailStatus.value = false
         productId.value = route.params.id
         store.dispatch('product/getProductDetail', productId.value)
