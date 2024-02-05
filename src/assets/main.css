@@ -1,3 +1,6 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter&family=Syne&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Syne&display=swap');
+
 nav {
   position: fixed;
   top: 0;
@@ -8,6 +11,10 @@ nav {
   gap: 32px;
   background-color: white;
   border-bottom: 1px solid lightgray;
+}
+
+.auth-card {
+  width: 402px;
 }
 
 .bg-green-vintage {
@@ -117,6 +124,28 @@ nav {
   text-align: center;
 }
 
+/* Semua input radio dengan class 'star' */
+input.star[type="radio"] {
+  display: none; /* Sembunyikan input radio bawaan */
+}
+
+/* Gaya label yang menampilkan bintang */
+label.star {
+  font-size: 1.5em; /* Ukuran bintang */
+  color: #ccc; /* Warna bintang non-dipilih */
+  cursor: pointer; /* Tampilkan kursor saat diarahkan ke bintang */
+}
+
+/* Gaya bintang ketika dipilih */
+label.star:before {
+  content: '\2605'; /* Karakter Unicode untuk bintang */
+}
+
+/* Gaya bintang ketika input radio dipilih */
+input.star[type="radio"]:checked + label.star:before {
+  color: #ffcc00; /* Warna bintang yang dipilih */
+}
+
 @media only screen and (min-width: 992px) {
   /* styles for browsers larger than 960px; */
 
@@ -142,6 +171,11 @@ nav {
   /* styles for mobile browsers smaller than 480px; (iPhone) */
   nav {
     padding: 12px 20px;
+    gap: 20px;
+  }
+
+  .auth-card {
+    width: 350px;
   }
 
   #hero {

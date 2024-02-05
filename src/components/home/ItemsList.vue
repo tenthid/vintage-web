@@ -1,11 +1,11 @@
 <template>
-    <div class="mt-4 row row-cols-1 row-cols-sm-3 row-cols-lg-6 row-gap-4">
-        <router-link to="#" v-for="product in products" class="item-card d-flex flex-column gap-2 text-decoration-none text-dark">
+    <div :class="classType[props.listType]">
+        <router-link :to="`/detail/${product.id}`" v-for="product in products" class="item-card d-flex flex-column gap-2 text-decoration-none text-dark">
             <img class="img-fluid" :src="product.image" alt="product image">
             <h3 class="color-green-vintage m-0">{{ displayedPrice(product.price) }}</h3>
             <p class="m-0">{{ product.name }}</p>
             <div class="d-flex justify-content-between align-items-center">
-                <p class="m-0">8 / M</p>
+                <p class="m-0">{{ product.size }}</p>
                 <i class="fa-regular fa-heart"></i>
             </div>
         </router-link>
@@ -14,10 +14,16 @@
 </template>
 
 <script setup>
-    import { computed, onMounted } from 'vue';
+    import { computed, reactive } from 'vue';
 
     const props = defineProps({
-        products: Object
+        products: Object,
+        listType: {type: String, default: 'default'}
+    })
+
+    const classType = reactive({
+        'default' : 'mt-4 row row-cols-1 row-cols-sm-3 row-cols-lg-6 row-gap-4',
+        'other' : 'mt-4 row row-cols-1 row-cols-sm-2 row-cols-lg-4 row-gap-4'
     })
     
     const products = computed(() => {
