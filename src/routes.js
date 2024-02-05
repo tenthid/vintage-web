@@ -30,33 +30,33 @@ const checkAuth = async () => {
 }
 
 export const routes = [
-    { path: '/', name: 'mainLayoutinHome', component: MainLayout,
-        children: [
-            {path: '', name:'homePage', component: HomePage}
-        ],
+    { path: '/', name: 'mainLayoutinHome', component: HomePage,
+        meta: {
+            layout: MainLayout
+        },
         beforeEnter: () => {
             checkAuth()
         }
     },
-    { path: '/product', name: 'mainLayoutinProduct', component: MainLayout,
-        children: [
-            {path: '', name:'productPage', component: ProductPage}
-        ]
+    { path: '/product', name: 'mainLayoutinProduct', component: ProductPage,
+        meta: {
+            layout: MainLayout
+        },
     },
-    { path: '/detail/:id', name: 'mainLayoutinDetail', component: MainLayout,
-        children: [
-            {path: '', name: 'detailPage', component: DetailPage}
-        ]
+    { path: '/detail/:id', name: 'mainLayoutinDetail', component: DetailPage,
+        meta: {
+            layout: MainLayout
+        },
 
     },
-    { path: '/login', name: 'authLayoutinLogin', component: AuthLayout,
-        children: [
-            {path: '', name: 'loginPage', component: LoginPage}
-        ]
+    { path: '/login', name: 'authLayoutinLogin', component: LoginPage,
+        meta: {
+            layout: AuthLayout
+        },
     },
-    { path: '/signup', name: 'authLayoutinSignup', component: AuthLayout,
-        children: [
-            {path: '', name: 'signupPage', component: SignupPage}
-        ]
+    { path: '/signup', name: 'authLayoutinSignup', component: SignupPage,
+        meta: {
+            layout: AuthLayout
+        },
     }
 ]

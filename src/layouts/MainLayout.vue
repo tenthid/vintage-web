@@ -1,6 +1,6 @@
 <template>
   <web-header :loginLayout="false"></web-header>
-  <router-view></router-view>
+  <slot></slot>
   <web-footer></web-footer>
 </template>
   
