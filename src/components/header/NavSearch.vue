@@ -23,10 +23,12 @@
     const item = ref()
     const searchParam = ref(route.query.search)
     const brandParam = ref(route.query.brand)
+    const typeParam = ref(route.query.type)
 
     watch(route, (newValue, oldValue) => {
         searchParam.value = route.query.search
         brandParam.value = route.query.brand
+        typeParam.value = route.query.type
         if (searchParam.value !== undefined && searchParam.value !== '') {
             item.value = searchParam.value
         } else {
@@ -35,7 +37,9 @@
     })
 
     const searchItem = () => {
-        if (brandParam.value !== undefined && brandParam.value !== '') {
+        if (typeParam.value !== undefined && typeParam.value !== '') {
+            router.push(`/product?type=${typeParam.value}&search=${item.value}`)
+        } else if (brandParam.value !== undefined && brandParam.value !== '') {
             router.push(`/product?brand=${brandParam.value}&search=${item.value}`)
         } else {
             router.push(`/product?search=${item.value}`)

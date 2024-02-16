@@ -6,8 +6,8 @@ export default {
     namespaced: true,
     state () {
         return {
-            authLinkSignup: 'https://identitytoolkit.googleapis.com/v1/accounts:signUp?key=AIzaSyAtGzsOA_3SpBii43hp81-niux0gAIs3Pk',
-            authLinkSignin: 'https://identitytoolkit.googleapis.com/v1/accounts:signInWithPassword?key=AIzaSyAtGzsOA_3SpBii43hp81-niux0gAIs3Pk',
+            authApi: 'https://identitytoolkit.googleapis.com/v1/accounts:',
+            apiKey: 'AIzaSyAtGzsOA_3SpBii43hp81-niux0gAIs3Pk',
             rtdbLink: 'https://vue-js-project-67129-default-rtdb.firebaseio.com/',
             userKey: '',
             token: null,
@@ -54,7 +54,7 @@ export default {
                 returnSecureToken: true
             }
             try {
-                const { data } = await axios.post(state.authLinkSignup, userData)
+                const { data } = await axios.post(`${state.authApi}signUp?key=${state.apiKey}`, userData)
                 commit("setToken", {    
                     idToken: data.idToken,
                     expiresIn: new Date().getTime() + Number.parseInt(data.expiresIn) * 1000
@@ -89,13 +89,59 @@ export default {
                 returnSecureToken: true
             }
             try {
-                const { data } = await axios.post(state.authLinkSignin, userData)
+                const { data } = await axios.post(`${state.authApi}signInWithPassword?key=${state.apiKey}`, userData)
                 console.log(new Date(Date.now() + parseInt(data.expiresIn)))
                 commit("setToken", {    
                     idToken: data.idToken,
                     expiresIn: new Date().getTime() + Number.parseInt(data.expiresIn) * 1000
                 })
-                dispatch('getUser', data.localId)
+                await dispatch('getUser', data.localId)
+            } catch(err) {
+                console.log(err)
+            }
+        },
+        async updateUserEmail({ dispatch, state}, payload) {
+            const userData = {   
+                idToken: state.token,
+                email: payload.email,
+                returnSecureToken: true
+            }
+            console.log(userData)
+            try {
+                const { data } = await axios.post(`${state.authApi}update?key=${state.apiKey}`, userData)
+                await dispatch('updateUserProfie', payload)
+            } catch(err) {
+                console.log(err)
+            }
+        },
+        async updateUserProfie({ state, dispatch }, payload) {
+            const userData = {
+                fullname: payload.fullname,
+                username: payload.username, 
+                email: payload.email,
+                image: payload.image,
+                likedList: payload.likedList,
+                cart: payload.cart,
+                buyHistory: payload.buyHistory,
+                userId: payload.userId
+            }
+            try {
+                const { data } = await axios.put(`${state.rtdbLink}users/${state.userKey}.json?auth=${state.token}`, userData)
+                dispatch('getUser', userData.userId)
+            } catch(err) {
+                console.log(err)
+            }
+        },
+        async changeUserPassword({ state },payload) {
+            const userData = {
+                newPassword: payload.newPassword,
+                oldPassword: payload.oldPassword,
+                email: state.userData.email
+            }
+            console.log(userData)
+            try {
+                const { data } = await axios.post(`${state.authApi}resetPassword?key=${state.apiKey}`, userData)
+                console.log(data)
             } catch(err) {
                 console.log(err)
             }
@@ -117,5 +163,12 @@ export default {
                 console.log(err)
             }
         },
+        async updateUserLike ({ state }, payload) {
+            try {
+                const { data } = await axios.put(`${state.rtdbLink}users/${state.userKey}/likedList.json`, payload) 
+            } catch(err) {
+                console.log(err)
+            }
+        }
     }
 }

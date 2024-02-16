@@ -46,12 +46,13 @@
                             <p v-if="requirement['userAgree']" class="text-danger m-0" style="font-size: 11px;">must be checked to signup</p>
                     </div>
 
-                    <button type="submit" class="btn btn-green-vintage w-100">
+                    <button type="submit" class="btn btn-green-vintage w-100 mb-1">
                         Sign up
                     </button>
                 </form>
+                <p class="text-center m-0" style="font-size: 14px;">have an account? <router-link class="text-decoration-none" to="/login">login</router-link></p>
                 <teleport to='body'>
-                    <basic-modal :topPosition="modalPosition" :modalImg="'/images/register-success.gif'" v-if="modalShow"></basic-modal>
+                    <basic-modal :topPosition="modalPosition" :modalImg="'/images/register-success.gif'" :modalTitle="'Successfuly Register'" :modalDesc="'Thank you for register at vintage. Start find your favorite pre-loved product here.'" :modalLink="'/'" :modalLinkText="'Go to Home Page'" v-if="modalShow"></basic-modal>
                 </teleport>
             </div>
         </div>
@@ -63,7 +64,8 @@
     import BasicModal from '../modal/BasicModal.vue'
     import { ref, reactive, onUpdated } from 'vue';
     import { useStore } from 'vuex';
-import { store } from '@/store';
+
+    const store = useStore()
 
     const userData = reactive({
         fullname: '',
@@ -166,10 +168,6 @@ import { store } from '@/store';
     //         isUserAgree.value = true
     //     }
     // }
-
-    const debug = async () => {
-        await store.dispatch('auth/getUser', userData)
-    }
  
     const signUp = async () => {
         // check all requirement to signup

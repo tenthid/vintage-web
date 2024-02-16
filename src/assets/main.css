@@ -124,28 +124,6 @@ nav {
   text-align: center;
 }
 
-/* Semua input radio dengan class 'star' */
-input.star[type="radio"] {
-  display: none; /* Sembunyikan input radio bawaan */
-}
-
-/* Gaya label yang menampilkan bintang */
-label.star {
-  font-size: 1.5em; /* Ukuran bintang */
-  color: #ccc; /* Warna bintang non-dipilih */
-  cursor: pointer; /* Tampilkan kursor saat diarahkan ke bintang */
-}
-
-/* Gaya bintang ketika dipilih */
-label.star:before {
-  content: '\2605'; /* Karakter Unicode untuk bintang */
-}
-
-/* Gaya bintang ketika input radio dipilih */
-input.star[type="radio"]:checked + label.star:before {
-  color: #ffcc00; /* Warna bintang yang dipilih */
-}
-
 .lds-ring {
   display: inline-block;
   position: relative;

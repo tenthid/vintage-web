@@ -21,12 +21,13 @@
 <style scoped>
     #hero {
         background: url('/images/home-bg.png') no-repeat; 
-        background-size: 100% 100%; 
-        height: 100vh;
+        background-size: 100% auto; 
+        height: 528px;
         padding: 0px 120px;
+        margin-top: 61px;
     }
 
-    @media (max-width: 768px) {
+    @media (max-width: 1024px) {
         #hero {
             background-size: auto 100%;
         }

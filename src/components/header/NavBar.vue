@@ -29,14 +29,20 @@ import ProfileMenu from './ProfileMenu.vue'
 import NavSearch from './NavSearch.vue';
 import AuthMenu from './AuthMenu.vue';
 import NavMobile from '../modal/NavMobile.vue'
-import { computed } from 'vue';
+import { computed, watch } from 'vue';
 import { useStore } from 'vuex';
+import { useRoute } from 'vue-router';
 
 defineProps({
     loginLayout: Boolean
 })
 
 const store = useStore()
+const route = useRoute()
+
+watch(route, (newValue, oldValue) => {
+    document.getElementById('btnNavMobileClose').click()
+})
 
 const loginStatus = computed(() => {
     return store.state.auth.isLogin

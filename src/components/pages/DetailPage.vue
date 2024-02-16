@@ -1,20 +1,6 @@
 <template>
     <div class="page">
         <div class="container-md pt-4 pb-5 mb-5" v-if="detailStatus">
-            <!-- <input class="star" type="radio" id="star1" name="rating" value="1">
-            <label class="star" for="star1"></label>
-
-            <input class="star" type="radio" id="star2" name="rating" value="2">
-            <label class="star" for="star2"></label>
-
-            <input class="star" type="radio" id="star3" name="rating" value="3">
-            <label class="star" for="star3"></label>
-
-            <input class="star" type="radio" id="star4" name="rating" value="4">
-            <label class="star" for="star4"></label>
-
-            <input class="star" type="radio" id="star5" name="rating" value="5">
-            <label class="star" for="star5"></label> -->
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <img :src="productDetail.image" alt="product image" width="100%" height="auto" class="mb-5">
@@ -24,7 +10,7 @@
                     </div>
                 </div>
                 <div class="col-12 col-lg-4">
-                    <description-card :productDetail="productDetail"></description-card>
+                    <description-card :userData="userData" :productDetail="productDetail"></description-card>
                     <div class="d-block d-lg-none">
                         <h4 class="mb-1 mt-5">Other Product</h4>
                         <items-list :listType="'other'" :products="products" ></items-list>
@@ -48,20 +34,28 @@
     
     const route  = useRoute()
     const store = useStore()
-    const products = store.state.product.products
-    
-    watch ( route, (newValue, oldValue) => {
-        detailStatus.value = false
-        productId.value = route.params.id
-        store.dispatch('product/getProductDetail', productId.value)
-        detailStatus.value = true
+    const products = computed(() => {
+        return store.state.product.products
     })
-
     const productId = ref(route.params.id)
     const detailStatus = ref(false)
     const productDetail = computed(() => {
         return store.state.product.productDetail
     })
+    const userData = computed(() => {
+        return store.state.auth.userData
+    })
+
+    // console.log(store.state.auth.userData)
+    
+    watch ( route, async (newValue, oldValue) => {
+        window.scrollTo(0, 0)
+        detailStatus.value = false
+        productId.value = route.params.id
+        await store.dispatch('product/getProductDetail', productId.value)
+        detailStatus.value = true
+    })
+
 
     onMounted(async () => {
         await store.dispatch('product/getProductDetail', productId.value)

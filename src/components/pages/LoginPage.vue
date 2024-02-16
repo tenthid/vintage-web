@@ -5,12 +5,19 @@
                 <form @submit.prevent="login()">
                     <h4 class="card-title mb-3" style="color: #404040;">Login to Vintage</h4>
                     <p class="tmb-4" style="color:#404040;">Enter your details below</p>
-                    <basic-input v-model="userData.email" class="mb-3" type="text" :identity="'email'" placeholder="Enter your email" label="Email"></basic-input>
-                    <basic-input v-model="userData.password" :identity="'password'" :isPassword="true" class="mb-5" placeholder="Enter your password" label="Password"></basic-input>
-                    <button type="submit" class="btn btn-green-vintage w-100">
+                    <div class="mb-3">
+                        <basic-input @keyInput="emptyCheck(userData.email, 'email')" v-model="userData.email" type="text" :identity="'email'" placeholder="Enter your email" label="Email"></basic-input>
+                        <p v-if="isEmpty['email']" class="text-danger fw-normal" style="font-size: 11px;">Enter password</p>
+                    </div>
+                    <div class="mb-5">
+                        <basic-input @keyInput="emptyCheck(userData.password, 'password')" v-model="userData.password" :identity="'password'" :isPassword="true" placeholder="Enter your password" label="Password"></basic-input>
+                        <p v-if="isEmpty['password']" class="text-danger fw-normal" style="font-size: 11px;">Enter password</p>
+                    </div>
+                    <button type="submit" class="btn btn-green-vintage w-100 mb-1">
                         Continue
                     </button>
                 </form>
+                <p class="text-center m-0" style="font-size: 14px;"><router-link class="text-decoration-none" to="/signup">signup</router-link> to create account</p>
             </div>
         </div>
     </div>
@@ -29,10 +36,26 @@
         email: '',
         password: ''
     })
+    const isEmpty = reactive({
+        'email': false,
+        'password': false
+    })
+
+    const emptyCheck = (data, isEmptyField) => {
+        if (!data) {
+            isEmpty[isEmptyField] = true
+        } else {
+            isEmpty[isEmptyField] = false
+        }
+    }
 
     const login = async () => {
-        await store.dispatch('auth/userLogin', userData)
-        router.push('/')
+        emptyCheck(userData.email, 'email')
+        emptyCheck(userData.password, 'password')
+        if (isEmpty['email'] !== true && isEmpty['password'] !== true) {
+            await store.dispatch('auth/userLogin', userData)
+            router.push('/')
+        }
     }
 </script>
 
