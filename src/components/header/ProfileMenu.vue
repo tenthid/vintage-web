@@ -3,7 +3,7 @@
         <div class="action-profile-menu">            
             <div class="position-relative align-items-center d-flex">
                 <router-link to="/cart" style="cursor: pointer;">
-                    <img src="/images/cart.svg" alt="">
+                    <img src="/images/cart.svg" alt="cart">
                 </router-link>
                 <span v-if="userData.cart? true : false" class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
                     {{ userData.cart.length }}
@@ -11,7 +11,7 @@
             </div>
             <div class="position-relative align-items-center d-flex">
                 <router-link to="/product?type=favorite" style="cursor: pointer;">
-                    <img src="/images/heart-regular.svg" alt="">
+                    <img src="/images/heart-regular.svg" alt="like">
                 </router-link>
                 <span v-if="userData.likedList? true : false " class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
                     {{ userData.likedList.length }}
@@ -39,15 +39,19 @@
         </div>
         <div class="d-flex gap-3">
             <div class="position-relative align-items-center d-flex">
-                <img src="/images/cart.svg" alt="">
-                <span v-if="bool" class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
-                    1
+                <router-link to="/cart" style="cursor: pointer;">
+                    <img src="/images/cart.svg" alt="cart">
+                </router-link>
+                <span v-if="userData.cart? true : false" class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
+                    {{ userData.cart.length }}
                 </span>
             </div>
             <div class="position-relative align-items-center d-flex">
-                <img src="/images/heart-regular.svg" alt="">
-                <span v-if="bool" class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
-                    1
+                <router-link to="/product?type=favorite" style="cursor: pointer;">
+                    <img src="/images/heart-regular.svg" alt="like">
+                </router-link>
+                <span v-if="userData.likedList? true : false " class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
+                    {{ userData.likedList.length }}
                 </span>
             </div>
         </div>
