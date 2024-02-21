@@ -1,5 +1,5 @@
 <template>
-    <div class="page page-custom">
+    <div class="page pb-lg-5" :class="isActive.transHistory? 'page-custom-transaction' : 'page-custom'" style="background-color: #F5F5F5;">
         <div class="container-md py-5 mb-lg-5">
             <div class="row ">
                 <div class="col-4 d-none d-lg-block">
@@ -79,7 +79,6 @@
 
     .page-custom {
         height: 92vh !important;
-        background-color: #F5F5F5;
     }
 
     @media (max-width: 426px) {

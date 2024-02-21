@@ -107,7 +107,7 @@
             searchParamDefined.value? 
                 filteredList.value = productList.filter(product =>
                 product.name.toLowerCase().includes(searchParam.value.toLowerCase())) :
-                console.error('no search param')
+                console.warn('no search query')
         } else if(typeParam.value === 'favorite') {
             if (isLogin.value) {
                 typeParamText.value = 'Favorite Items'

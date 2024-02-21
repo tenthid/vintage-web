@@ -32,6 +32,13 @@
                 <div class="mb-3">
                     <basic-input v-model="modifyUserData.email" identity="email" :withSpan="false" type="email" label="Email" placeholder="Modify your email"></basic-input>
                 </div>
+                <div class="mb-4">
+                    <basic-input v-model="modifyUserData.address" identity="address" :withSpan="false" type="text"  label="Address" placeholder="Modify your address">
+                        <button @click.prevent="setLocation()" class="btn btn-outline-green-vintage">
+                            Auto
+                        </button>
+                    </basic-input>
+                </div>
                 <div class="d-flex justify-content-end">
                     <button class="btn btn-green-vintage">
                         Update Profile
@@ -40,12 +47,18 @@
             </form>
         </div>
     </div>
+    <teleport to='#app'>
+        <div class="w-100 p-1" :class="isError? 'bg-danger' : 'bg-success'" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
+            <p class="m-0 text-light text-center" style="font-size: 14px;">{{ isError? 'Failed updated your details' : 'Success updated your details' }}</p>
+        </div>
+    </teleport>
 </template>
 
 <script setup>
     import BasicInput from '../ui/BasicInput.vue';
-    import { reactive } from 'vue';
+    import { reactive,ref } from 'vue';
     import { useStore } from 'vuex';
+    import axios from 'axios';
 
     const props = defineProps({
         userData: Object
@@ -60,11 +73,20 @@
         likedList: props.userData.likedList,
         cart: props.userData.cart,
         buyHistory: props.userData.buyHistory,
-        userId: props.userData.userId
+        userId: props.userData.userId,
+        address: props.userData.address
     })
+    const topPosition = ref(0)
+    const notifTimeOut = ref()
+    const isError = ref()
 
     const updateProfile = async () => {
-        await store.dispatch('auth/updateUserEmail', modifyUserData)
+        isError.value = await store.dispatch('auth/updateUserEmail', modifyUserData)
+        clearTimeout(notifTimeOut.value)
+            topPosition.value = 64
+            notifTimeOut.value = setTimeout(() => {
+                topPosition.value = 0
+        }, 3000)
         // await store.dispatch('auth/updateUserProfile', modifyUserData)
     }
 
@@ -84,6 +106,16 @@
       reader.addEventListener("load", () => {
         modifyUserData.image = reader.result;
       });
+    }
+
+    const setLocation = async () => {
+        navigator.geolocation.getCurrentPosition(async position => {
+            // latitude.value = await position.coords.latitude
+            // longitude.value = await position.coords.longitude
+            const { data } = await axios.get(`https://api.mapbox.com/geocoding/v5/mapbox.places/${position.coords.longitude},${position.coords.latitude}.json?access_token=pk.eyJ1IjoidGVudGhpZCIsImEiOiJjbHNvOW9yY3AwMjF1MmtuanlvYjM2bWRvIn0.Eh62O1nSska1jqheSsiuJw`)
+            modifyUserData.address = data.features[0].place_name
+            // address.value.name = data.features[0].text
+        })
     }
     // onMounted(() => {
     //     Object.assign(modifyUserData, props.userData)

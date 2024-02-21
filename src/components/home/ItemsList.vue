@@ -1,9 +1,11 @@
 <template>
     <div :class="classType[props.listType]">
-        <router-link :to="`/detail/${product.id}`" v-for="product in products" class="item-card d-flex flex-column gap-2 text-decoration-none text-dark">
-            <img class="img-fluid" :src="product.image" alt="product image">
-            <h3 class="color-green-vintage m-0">{{ displayedPrice(product.price) }}</h3>
-            <p class="m-0">{{ product.name }}</p>
+        <router-link :to="`/detail/${product.id}`" v-for="product in sortedProducts" class="item-card d-flex flex-column justify-content-between text-decoration-none text-dark">
+            <div class="d-flex flex-column gap-2">
+                <img class="img-fluid" :src="product.image" alt="product image">
+                <h3 class="color-green-vintage m-0">{{ displayedPrice(product.price) }}</h3>
+                <p class="m-0">{{ product.name }}</p>
+            </div>
             <div class="d-flex justify-content-between align-items-center">
                 <p class="m-0">{{ product.size }}</p>
                 <div class="d-flex align-items-center gap-1">
@@ -47,9 +49,10 @@
     const isLogin = computed(() => {
         return store.state.auth.isLogin
     })
+    const sortedProducts = ref()
 
-    watch(() => store.state.auth.userData, (newValue, oldValue) => {
-        filterIsLike()
+    watch(() => store.state.auth.userData, async (newValue, oldValue) => {
+        await filterIsLike()
     })
 
     const displayedPrice = (price) => {return parseInt(price).toLocaleString('id-ID', { style: 'currency', currency: 'IDR',minimumFractionDigits: 0,maximumFractionDigits: 0 })}
@@ -109,12 +112,13 @@
         }
     }
 
-    onMounted(() => {
-        // console.log(isLogin.value)
-        // console.log(Object.values(userLikedProduct.value))
-        // const UID = Cookies.get('UID')
-        // store.dispatch('auth/getUser', UID)
-        filterIsLike()
+    onMounted(async () => {
+        await filterIsLike()
+        if (props.listType === 'other') {
+            sortedProducts.value = products.value.slice(0, 8)
+        } else {
+            sortedProducts.value = products.value
+        }
     })
 </script>
 

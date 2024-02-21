@@ -60,6 +60,8 @@ export default {
                 for (let key in data.rate) {
                     if (key === rootState.auth.userKey) {
                         data.userRate = data.rate[key]
+                    } else {
+                        data.userRate = 0
                     }
                 }
                 commit('setProductDetail', data)

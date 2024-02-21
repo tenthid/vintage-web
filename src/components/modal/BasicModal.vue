@@ -2,7 +2,7 @@
     <div class="modal-container" :style="{top: topPosition + 'px'}">
         <div class="modal-vintage">
             <img style="width: 189px; height: 189px;" :src="imgSrc" alt="success" loop="false">
-            <h1 class="modal-header-vintage">{{ props.modalTItle }}</h1>
+            <h1 class="modal-header-vintage text-center">{{ props.modalTitle }}</h1>
             <p class="modal-description-vintage">{{ props.modalDesc }}</p>
             <slot></slot>
             <router-link @click="enableScroll()" class="btn btn-green-vintage w-100" :to="props.modalLink">{{ props.modalLinkText }}</router-link>
@@ -16,7 +16,7 @@
     const props = defineProps({
         modalImg: String,
         topPosition: Number,
-        modalTItle: String,
+        modalTitle: String,
         modalDesc: String,
         modalLinkText: String,
         modalLink: String,

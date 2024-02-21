@@ -7,7 +7,7 @@
                     <p class="tmb-4" style="color:#404040;">Enter your details below</p>
                     <div class="mb-3">
                         <basic-input @keyInput="emptyCheck(userData.email, 'email')" v-model="userData.email" type="text" :identity="'email'" placeholder="Enter your email" label="Email"></basic-input>
-                        <p v-if="isEmpty['email']" class="text-danger fw-normal" style="font-size: 11px;">Enter password</p>
+                        <p v-if="isEmpty['email']" class="text-danger fw-normal" style="font-size: 11px;">Enter username</p>
                     </div>
                     <div class="mb-5">
                         <basic-input @keyInput="emptyCheck(userData.password, 'password')" v-model="userData.password" :identity="'password'" :isPassword="true" placeholder="Enter your password" label="Password"></basic-input>
@@ -21,12 +21,17 @@
             </div>
         </div>
     </div>
+    <teleport to='body'>
+        <div class="bg-danger w-100 p-1" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
+            <p class="m-0 text-light text-center" style="font-size: 14px;">Wrong username or password</p>
+        </div>
+    </teleport>
 </template>
 
 <script setup>
     import BasicInput from '../ui/BasicInput.vue'
     import { useRouter } from 'vue-router';
-    import { reactive } from 'vue';
+    import { reactive, ref } from 'vue';
     import { useStore } from 'vuex';
 
     const router = useRouter()
@@ -40,6 +45,8 @@
         'email': false,
         'password': false
     })
+    const topPosition = ref(0)
+    const notifTimeOut = ref()
 
     const emptyCheck = (data, isEmptyField) => {
         if (!data) {
@@ -52,9 +59,18 @@
     const login = async () => {
         emptyCheck(userData.email, 'email')
         emptyCheck(userData.password, 'password')
+        const isError = ref(false)
         if (isEmpty['email'] !== true && isEmpty['password'] !== true) {
-            await store.dispatch('auth/userLogin', userData)
-            router.push('/')
+            isError.value = await store.dispatch('auth/userLogin', userData)
+            if(isError.value) {
+                clearTimeout(notifTimeOut.value)
+                topPosition.value = 64
+                notifTimeOut.value = setTimeout(() => {
+                        topPosition.value = 0
+                    }, 3000)
+            } else {
+                router.push('/')
+            }
         }
     }
 </script>

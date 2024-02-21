@@ -29,7 +29,7 @@
                 </div>
             </div>
             <hr>
-            <router-link class="btn btn-green-vintage text-decoration-none w-100 mb-3" to="#">Buy Now</router-link>
+            <button @click="buyProduct()" class="btn btn-green-vintage text-decoration-none w-100 mb-3">Buy Now</button>
             <button @click="addToCart()" class="btn btn-outline-green-vintage w-100" to="#">Add to Cart</button>
             <teleport to='body'>
                 <basic-modal :topPosition="modalPosition" :modalImg="'/images/add-to-cart.gif'" :modalTitle="'Product successfully added to cart'" :modalDesc="'“Vintage chicago cubs white” successfully added to cart. Check now on the cart or continue shopping.'" :modalLink="'/cart'" :modalLinkText="'Go to cart'" v-if="modalShow">
@@ -52,7 +52,7 @@
                                 @click="selectStar(star)">
                                     <!-- &#x2605; -->
                             </div>
-                                <p class="ms-2 mb-0">({{ Object.values(props.productDetail.rate).length }})</p>
+                                <p class="ms-2 mb-0">({{ Object.keys(productRate).length }})</p>
                             </div>
                         </div>
                     </div>
@@ -64,6 +64,11 @@
             </div>
         </div>
     </div>
+    <teleport to='body'>
+        <div class="bg-danger w-100 p-1" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
+            <p class="m-0 text-light text-center" style="font-size: 14px;">Your address is not set yet</p>
+        </div>
+    </teleport>
 </template>
 
 <script setup>
@@ -84,6 +89,13 @@
     const isLogin = computed(() => {
         return store.state.auth.isLogin
     })
+    const productRate = computed(() => {
+        if(props.productDetail.rate) {
+            return props.productDetail.rate
+        } else {
+            return {}
+        }
+    })
     const userLikedProduct = computed(() => {
         if(store.state.auth.userData.likedList) {
             return Object.values(store.state.auth.userData.likedList)
@@ -101,6 +113,11 @@
     const rate = ref(props.productDetail.userRate)
     const modalShow = ref(false)
     const modalPosition = ref()
+    const userAddress = computed(() => {
+        return store.state.auth.userData.address
+    })
+    const topPosition = ref(0)
+    const notifTimeOut = ref()
 
     watch(() => store.state.auth.userData, (newValue, oldValue) => {
         filterIsLike()
@@ -111,6 +128,7 @@
         if ( star !== rate.value ) {
             await store.dispatch('product/addRate', { productId: id, rate: star})
             rate.value = star
+            await store.dispatch('product/getProductDetail', route.params.id)
         }
     }
 
@@ -138,22 +156,22 @@
         const differenceTime = (currentTime - uploadTime) / 1000
         // differenceTime.value = Math.floor(differenceTime.value / 1000)
         if (differenceTime < 60) {
-            return `${differenceTime} seconds ago`;
+            return `${differenceTime} ${differenceTime - 1? 'seconds' : 'second'} ago`;
         } else if (differenceTime < 3600) {
             const minutes = Math.floor(differenceTime / 60);
-            return `${minutes} minutes ago`;
+            return `${minutes} ${minutes - 1? 'minutes' : 'minute'} ago`;
         } else if (differenceTime < 86400) {
             const hours = Math.floor(differenceTime / 3600);
-            return `${hours} hours ago`;
+            return `${hours} ${hours - 1? 'hours' : 'hour'} ago`;
         } else if (differenceTime < 2592000) {
             const days = Math.floor(differenceTime / 86400);
-            return `${days} days ago`;
+            return `${days} ${days - 1? 'days' : 'day'} ago`;
         } else if (differenceTime < 31536000) {
             const months = Math.floor(differenceTime / 2592000);
-            return `${months} months ago`;
+            return `${months} ${months - 1? 'months' : 'month'} ago`;
         } else {
             const years = Math.floor(differenceTime / 31536000);
-            return `${years} years ago`;
+            return `${years} ${years - 1? 'years' : 'year'} ago`;
         }
     }
     
@@ -202,7 +220,10 @@
                 name: props.productDetail.name,
                 price: props.productDetail.price,
                 size: props.productDetail.size,
-                quantity: 1
+                quantity: 1,
+                shipping: props.productDetail.shipping,
+                protectionFee: props.productDetail.protectionFee,
+                color: props.productDetail.color
             }
             if (cartItems.value.length > 0) {
                 const isExist = ref(false)
@@ -223,6 +244,22 @@
             modalShow.value = true
             modalPosition.value = window.scrollY
             document.documentElement.style.overflow = 'hidden';
+        } else {
+            router.push('/login')
+        }
+    }
+
+    const buyProduct = () => {
+        if (isLogin.value) {
+            if (userAddress.value) {
+                router.push(`/cart?order=confirmation&item=${route.params.id}`)
+            } else {
+                clearTimeout(notifTimeOut.value)
+                topPosition.value = 64
+                notifTimeOut.value = setTimeout(() => {
+                    topPosition.value = 0
+                }, 3000)
+            }
         } else {
             router.push('/login')
         }

@@ -24,7 +24,7 @@
             </button>
             <ul class="dropdown-menu">
                 <li><router-link class="dropdown-item d-flex align-items-center" to="/profile"><img class="me-2" src="/images/person.svg">Profile</router-link></li>
-                <li><router-link class="dropdown-item d-flex align-items-center" to="#"><img class="me-2" src="/images/receipt.svg">Order</router-link></li>
+                <li><router-link class="dropdown-item d-flex align-items-center" to="/profile/transaction-history"><img class="me-2" src="/images/receipt.svg">Order</router-link></li>
                 <li><a @click="logout()" class="dropdown-item d-flex align-items-center text-danger" style="cursor: pointer;"><img class="me-2" src="/images/exit.svg">Logout</a></li>
             </ul>
         </div>
@@ -42,7 +42,7 @@
                 <router-link to="/cart" style="cursor: pointer;">
                     <img src="/images/cart.svg" alt="cart">
                 </router-link>
-                <span v-if="userData.cart? true : false" class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
+                <span v-if="userData.cart? true : false" class="position-absolute badge start-0 rounded-pill bg-danger" style="top: 9px;">
                     {{ userData.cart.length }}
                 </span>
             </div>
@@ -50,7 +50,7 @@
                 <router-link to="/product?type=favorite" style="cursor: pointer;">
                     <img src="/images/heart-regular.svg" alt="like">
                 </router-link>
-                <span v-if="userData.likedList? true : false " class="position-absolute badge start-0 top-0 rounded-pill bg-danger">
+                <span v-if="userData.likedList? true : false " class="position-absolute badge start-0 rounded-pill bg-danger" style="top: 9px;">
                     {{ userData.likedList.length }}
                 </span>
             </div>

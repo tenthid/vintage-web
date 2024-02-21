@@ -67,7 +67,8 @@ export default {
                     image: payload.image,
                     likedList: ['null'],
                     cart: ['null'],
-                    buyHistory: ['null']
+                    buyHistory: ['null'],
+                    address: '',
                 }
                 await dispatch('addUser', addUserData)
             } catch(err) {
@@ -96,8 +97,10 @@ export default {
                     expiresIn: new Date().getTime() + Number.parseInt(data.expiresIn) * 1000
                 })
                 await dispatch('getUser', data.localId)
+                return false
             } catch(err) {
                 console.log(err)
+                return true
             }
         },
         async updateUserEmail({ dispatch, state}, payload) {
@@ -106,12 +109,13 @@ export default {
                 email: payload.email,
                 returnSecureToken: true
             }
-            console.log(userData)
             try {
                 const { data } = await axios.post(`${state.authApi}update?key=${state.apiKey}`, userData)
                 await dispatch('updateUserProfie', payload)
+                return false
             } catch(err) {
                 console.log(err)
+                return true
             }
         },
         async updateUserProfie({ state, dispatch }, payload) {
@@ -123,7 +127,8 @@ export default {
                 likedList: payload.likedList,
                 cart: payload.cart,
                 buyHistory: payload.buyHistory,
-                userId: payload.userId
+                userId: payload.userId,
+                address: payload.address
             }
             try {
                 const { data } = await axios.put(`${state.rtdbLink}users/${state.userKey}.json?auth=${state.token}`, userData)

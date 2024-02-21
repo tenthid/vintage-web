@@ -21,16 +21,19 @@
             <span class="input-group-text bg-white "><i style="cursor: pointer;" @click="passIconControl()" :class="passIcon? ['fa-solid fa-eye-slash'] : ['fa-solid fa-eye']"></i></span>
         </div>
 
-        <input v-else
-        :class="[{ 'd-none': isPassword}, 'form-control input-no-focus' ]" 
-        :type="type"
-        :id="identity"
-        :placeholder="placeholder" 
-        :readonly="readonly === '1'"
-        :value="modelValue"
-        @input="$emit('update:modelValue', $event.target.value)"
-        @keyup="$emit('keyInput', $event.target.value)"
-        @focus="$emit('totalTimeFocus', $event.target.value)"/>
+        <div v-else class="d-flex gap-3">
+            <input 
+            :class="[{ 'd-none': isPassword}, 'form-control input-no-focus' ]" 
+            :type="type"
+            :id="identity"
+            :placeholder="placeholder" 
+            :readonly="readonly === '1'"
+            :value="modelValue"
+            @input="$emit('update:modelValue', $event.target.value)"
+            @keyup="$emit('keyInput', $event.target.value)"
+            @focus="$emit('totalTimeFocus', $event.target.value)"/>
+            <slot></slot>
+        </div>
 
     </div>
 </template>
