@@ -20,8 +20,9 @@
 
                     <!-- email -->
                     <div class="mb-3">
-                        <basic-input @keyInput="checkIsEmpty(userData.email, 'email')" v-model="userData.email" type="text" :identity="'email'" placeholder="Enter your email" label="Email"></basic-input>
-                        <p v-if="requirement['email']" class="text-danger mt-1" style="font-size: 11px;">Enter your email</p>
+                        <basic-input @keyInput="() => {checkIsEmpty(userData.email, 'email'); isEmailCheck()}" v-model="userData.email" type="text" :identity="'email'" placeholder="Enter your email" label="Email"></basic-input>
+                        <p v-if="requirement['email']" class="text-danger mt-1 mb-0" style="font-size: 11px;">Enter your email</p>
+                        <p v-if="!isEmailFormat && !requirement['email']" class="text-danger mt-1" style="font-size: 11px;">Please enter a valid email</p>
                     </div>
 
                     <!-- password -->
@@ -57,6 +58,11 @@
             </div>
         </div>
     </div>
+    <teleport to='body'>
+        <div class="bg-danger w-100 p-1" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
+            <p class="m-0 text-light text-center" style="font-size: 14px;">Email is already registered</p>
+        </div>
+    </teleport>
 </template>
 
 <script setup>
@@ -64,8 +70,10 @@
     import BasicModal from '../modal/BasicModal.vue'
     import { ref, reactive, onUpdated } from 'vue';
     import { useStore } from 'vuex';
+    import { useRouter } from 'vue-router';
 
     const store = useStore()
+    const router = useRouter()
 
     const userData = reactive({
         fullname: '',
@@ -81,6 +89,8 @@
     const modalPosition = ref()
     const userAgreement = ref(false)
     const modalShow = ref(false)
+    const isError = ref()
+    const isEmailFormat = ref(true)
 
     const requirement = reactive({
         'fullname' : false,
@@ -89,6 +99,8 @@
         'password' : false,
         'userAgree' : false
     })
+    const topPosition = ref(0)
+    const notifTimeOut = ref()
     // const isUserAgree = ref(false)
     // const isFullNameEmpty = ref(false)
     // const isUserNameEmpty = ref(false)
@@ -100,6 +112,15 @@
             requirement[isEmpty] = true;
         } else {
             requirement[isEmpty] = false;
+        }
+    }
+
+    const isEmailCheck = () => {
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (emailRegex.test(userData.email)) {
+            isEmailFormat.value = true
+        } else {
+            isEmailFormat.value = false
         }
     }
 
@@ -181,11 +202,20 @@
         checkIsEmpty(userData.email, 'email')
         checkIsEmpty(userData.password, 'password')
         checkIsEmpty(userAgreement.value, 'userAgree')
-        if (requirement['fullname'] === false && requirement['username'] === false && requirement['email']  === false && requirement['password'] === false && passwordMatch.value && passwordStatusDisplay.value && userAgreement.value) {
-            await store.dispatch('auth/userRegister', userData)
-            modalShow.value = !modalShow.value
-            modalPosition.value = window.scrollY
-            document.documentElement.style.overflow = 'hidden';
+        isEmailCheck()
+        if (requirement['fullname'] === false && requirement['username'] === false && requirement['email']  === false && requirement['password'] === false && passwordMatch.value && passwordStatusDisplay.value && userAgreement.value && isEmailFormat.value) {
+            isError.value = await store.dispatch('auth/userRegister', userData)
+            if(isError.value) {
+                clearTimeout(notifTimeOut.value)
+                topPosition.value = 62
+                notifTimeOut.value = setTimeout(() => {
+                    topPosition.value = 0
+                }, 3000)
+            } else {
+                modalShow.value = !modalShow.value
+                modalPosition.value = window.scrollY
+                document.documentElement.style.overflow = 'hidden';
+            }
         }
     }
 

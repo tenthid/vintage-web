@@ -19,13 +19,21 @@
             </div>
         </div>
         <div v-else class="d-flex justify-content-center align-items-center" style="height: 92vh;">
-            <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+            <div v-if="isProductNull" class="d-flex justify-content-center align-items-center flex-column" style="height: 86vh;">
+                <img src="/images/products-bag-cross.svg" alt="not found img">
+                <h3>Cant find product you want</h3>
+                <p class="text-muted text-center">Maybe this product is no longer in our database</p>
+                <router-link to="/product"  class="btn btn-green-vintage text-decoration-none">
+                    Find Another Products
+                </router-link>
+            </div>
+            <div v-else class="lds-ring"><div></div><div></div><div></div><div></div></div>
         </div>
     </div>
 </template>
 
 <script setup>
-    import { useRoute } from 'vue-router';
+    import { useRoute, useRouter } from 'vue-router';
     import { useStore } from 'vuex';
     import { onMounted, computed, ref, watch } from 'vue';
     import DescriptionCard from '../detail/DescriptionCard.vue'
@@ -33,6 +41,7 @@
 
     
     const route  = useRoute()
+    const router = useRouter()
     const store = useStore()
     const products = computed(() => {
         return store.state.product.products
@@ -45,6 +54,7 @@
     const userData = computed(() => {
         return store.state.auth.userData
     })
+    const isProductNull = ref(false)
 
     // console.log(store.state.auth.userData)
     
@@ -58,8 +68,12 @@
 
 
     onMounted(async () => {
-        await store.dispatch('product/getProductDetail', productId.value)
-        detailStatus.value = true
+        await store.dispatch('product/getProductDetail', productId.value)   
+        if(Object.keys(productDetail.value).length > 1) {
+            detailStatus.value = true
+        } else {
+            isProductNull.value = true
+        }
     })
 </script>
 

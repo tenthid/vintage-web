@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 
 
@@ -65,14 +65,13 @@ export default {
                     username: payload.username,
                     email: payload.email,
                     image: payload.image,
-                    likedList: ['null'],
-                    cart: ['null'],
-                    buyHistory: ['null'],
                     address: '',
                 }
                 await dispatch('addUser', addUserData)
+                return false
             } catch(err) {
                 console.log(err)
+                return true
             }
         },
         async addUser({commit, state, dispatch}, payload) {
@@ -87,7 +86,7 @@ export default {
             const userData = {
                 email: payload.email,
                 password: payload.password,
-                returnSecureToken: true
+                returnSecureToken: true,
             }
             try {
                 const { data } = await axios.post(`${state.authApi}signInWithPassword?key=${state.apiKey}`, userData)
@@ -100,6 +99,27 @@ export default {
                 return false
             } catch(err) {
                 console.log(err)
+                return true
+            }
+        },
+        async sendOobVerify({state}, payload) {
+            const token = Cookies.get('token')
+            const UID = Cookies.get('UID')
+            console.log(payload)
+            try {
+                const { data } = await axios.post(`${state.authApi}sendOobCode?key=${state.apiKey}`,{
+                    requestType: "VERIFY_AND_CHANGE_EMAIL",
+                    idToken: token,
+                    email: state.userData.email,
+                    newEmail: payload,
+                    // continueUrl: 'https://tenthid-vintage.netlify.app/profile?change=true'
+                    // localId: [UID],
+                    // returnOobLink: true
+                })
+                console.log(data)
+                return false
+            } catch(err) {
+                console.log(err.response.request.responseText)
                 return true
             }
         },

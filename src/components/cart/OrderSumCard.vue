@@ -101,7 +101,7 @@
             router.push('/cart?order=confirmation')
         } else if (!userAddress.value && props.cartItems.length > 0) {
             clearTimeout(notifTimeOut.value)
-            topPosition.value = 64
+            topPosition.value = 62
             notifTimeOut.value = setTimeout(() => {
                 topPosition.value = 0
             }, 3000)

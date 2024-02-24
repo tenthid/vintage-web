@@ -81,6 +81,7 @@
 
     const logout = async () => {
         store.commit('auth/setUserLogout')
+        await store.dispatch('product/getProductData')
         router.push('/')
     }
 

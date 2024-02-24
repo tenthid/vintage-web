@@ -1,6 +1,14 @@
 <template>
     <div class="page pb-5" :style="{'background-color' : order? '#F5F5F5' : 'white'}">
-        <div class="container-md pt-4 pb-5">
+        <div v-if="isProductNull" class="d-flex justify-content-center align-items-center flex-column" style="height: 86vh;">
+            <img src="/images/products-bag-cross.svg" alt="not found img">
+            <h3>Cant find product you want</h3>
+            <p class="text-muted text-center">Maybe this product is no longer in our database</p>
+            <router-link to="/product"  class="btn btn-green-vintage text-decoration-none">
+                Find Another Products
+            </router-link>
+        </div>
+        <div v-else class="container-md pt-4 pb-5">
             <div class="row">
                 <div class="col-12 col-lg-8">
                     <div v-if="order">
@@ -161,6 +169,7 @@
     const totalShipping = ref(0)
     const parentRendered = ref(false)
     const orderItem = ref()
+    const isProductNull = ref(false)
 
     watch(route, (newValue, oldValue) => {
         checkOrderType()
@@ -186,27 +195,37 @@
 
     const checkOrderType = async () => {
         if (route.query.order === 'confirmation') {
-            await store.dispatch('cart/getBuyHistory')
+            // await store.dispatch('cart/getBuyHistory')
             if (route.query.item) {
                 order.value = true
                 await store.dispatch('product/getProductDetail', route.query.item)
-                const product = store.state.product.productDetail
-                const item = {
-                    name: product.name,
-                    size: product.size,
-                    image: product.image,
-                    price: product.price,
-                    shipping: product.shipping,
-                    protectionFee: product.protectionFee,
-                    quantity: 1,
-                    color: product.color
+                if (Object.keys(store.state.product.productDetail).length) {
+                    console.log(store.state.product.productDetail)
+                    const product = store.state.product.productDetail
+                    const item = {
+                        name: product.name,
+                        size: product.size,
+                        image: product.image,
+                        price: product.price,
+                        shipping: product.shipping,
+                        protectionFee: product.protectionFee,
+                        quantity: 1,
+                        color: product.color
+                    }
+                    orderItem.value = [item]
+                    totalShipping.value = parseInt(product.shipping)
+                } else {
+                    isProductNull.value = true
                 }
-                orderItem.value = [item]
-                totalShipping.value = parseInt(product.shipping)
             } else if(route.query.rebuy) {
                 order.value = true
                 await store.dispatch('cart/getRebuyItems', route.query.rebuy)
-                orderItem.value = store.state.cart.rebuyItems
+                if (Object.keys(store.state.cart.rebuyItems).length) {
+                    console.log(store.state.cart.rebuyItems)
+                    orderItem.value = store.state.cart.rebuyItems
+                } else {
+                    isProductNull.value = true
+                }
             } else if(cartItems.value.length > 0) {
                 order.value = true
                 orderItem.value = cartItems.value

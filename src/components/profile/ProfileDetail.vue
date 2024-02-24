@@ -30,7 +30,12 @@
                     <basic-input v-model="modifyUserData.username" identity="username" :withSpan="false" type="text" label="Username" placeholder="Modify your username"></basic-input>
                 </div>
                 <div class="mb-3">
-                    <basic-input v-model="modifyUserData.email" identity="email" :withSpan="false" type="email" label="Email" placeholder="Modify your email"></basic-input>
+                    <basic-input v-model="modifyUserData.email" identity="email" :withSpan="false" type="email" label="Email" placeholder="Modify your email">
+                        <!-- <button @click.prevent="verifyEmail()" style="white-space: nowrap;" class="btn btn-outline-green-vintage" title="you must verify email before change it">
+                            verify email
+                        </button> -->
+                    </basic-input>
+                    <!-- <span class="p-2 rounded bg-danger>!</span> -->
                 </div>
                 <div class="mb-4">
                     <basic-input v-model="modifyUserData.address" identity="address" :withSpan="false" type="text"  label="Address" placeholder="Modify your address">
@@ -47,9 +52,9 @@
             </form>
         </div>
     </div>
-    <teleport to='#app'>
+    <teleport to='body'>
         <div class="w-100 p-1" :class="isError? 'bg-danger' : 'bg-success'" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
-            <p class="m-0 text-light text-center" style="font-size: 14px;">{{ isError? 'Failed updated your details' : 'Success updated your details' }}</p>
+            <p class="m-0 text-light text-center" style="font-size: 14px;">{{ notifMessage }}</p>
         </div>
     </teleport>
 </template>
@@ -79,14 +84,19 @@
     const topPosition = ref(0)
     const notifTimeOut = ref()
     const isError = ref()
+    const notifMessage = ref()
 
-    const updateProfile = async () => {
-        isError.value = await store.dispatch('auth/updateUserEmail', modifyUserData)
+    const showNotif = () => {
         clearTimeout(notifTimeOut.value)
-            topPosition.value = 64
+            topPosition.value = 62
             notifTimeOut.value = setTimeout(() => {
                 topPosition.value = 0
         }, 3000)
+    }
+
+    const updateProfile = async () => {
+        isError.value = await store.dispatch('auth/updateUserEmail', modifyUserData)
+        isError.value? notifMessage.value = 'Failed to update your details' : notifMessage.value = 'Updated your details successfully'
         // await store.dispatch('auth/updateUserProfile', modifyUserData)
     }
 
@@ -116,6 +126,12 @@
             modifyUserData.address = data.features[0].place_name
             // address.value.name = data.features[0].text
         })
+    }
+
+    const verifyEmail = async () => {
+        isError.value = await store.dispatch('auth/sendOobVerify', modifyUserData.email)
+        showNotif()
+        isError.value? notifMessage.value = 'Failed to sent vaerification link' : notifMessage.value = 'We have sent a verification link into your new email'
     }
     // onMounted(() => {
     //     Object.assign(modifyUserData, props.userData)

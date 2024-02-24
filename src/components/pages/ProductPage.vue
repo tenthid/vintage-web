@@ -70,6 +70,7 @@
     const typeParamText = ref()
 
     watch(route, (newValue, oldValue) => {
+        // console.log('route check jalan')
         typeParam.value = route.query.type
         brandParam.value = route.query.brand
         searchParam.value = route.query.search
@@ -100,7 +101,7 @@
         if (typeParam.value === 'new') {
             typeParamDefined.value = true
             typeParamText.value = 'New Items'
-            filteredList.value = await productList.slice().sort(function(a, b) {
+            filteredList.value = await productList.slice().sort((a, b) => {
                 return b.timeUploaded - a.timeUploaded;
             })
             // console.log(filteredList.value[0].timeUploaded > filteredList.value[1].timeUploaded)
@@ -124,7 +125,7 @@
                     searchParamDefined.value? 
                         filteredList.value = filteredList.value.filter(product =>
                         product.name.toLowerCase().includes(searchParam.value.toLowerCase())) :
-                        console.error('no search param')
+                        console.warn('no search param')
                 } else {
                     filteredList.value = []
                 }

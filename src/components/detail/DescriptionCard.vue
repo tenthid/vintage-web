@@ -120,6 +120,7 @@
     const notifTimeOut = ref()
 
     watch(() => store.state.auth.userData, (newValue, oldValue) => {
+        // console.log('blud got new data')
         filterIsLike()
     })
     
@@ -140,6 +141,9 @@
                     if (productId === route.params.id) {
                         // console.log('like')
                         props.productDetail.isLike = true
+                    } else {
+                        // console.log('dislike')
+                        props.productDetail.isLike = false
                     }
                 })
             } else {
@@ -255,7 +259,7 @@
                 router.push(`/cart?order=confirmation&item=${route.params.id}`)
             } else {
                 clearTimeout(notifTimeOut.value)
-                topPosition.value = 64
+                topPosition.value = 62
                 notifTimeOut.value = setTimeout(() => {
                     topPosition.value = 0
                 }, 3000)

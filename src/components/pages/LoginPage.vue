@@ -23,7 +23,7 @@
     </div>
     <teleport to='body'>
         <div class="bg-danger w-100 p-1" style="position: fixed; z-index: 1; transition: top 0.4s ease-in-out;" :style="{'top' : topPosition + 'px'}">
-            <p class="m-0 text-light text-center" style="font-size: 14px;">Wrong username or password</p>
+            <p class="m-0 text-light text-center" style="font-size: 14px;">Wrong email or password</p>
         </div>
     </teleport>
 </template>
@@ -64,7 +64,7 @@
             isError.value = await store.dispatch('auth/userLogin', userData)
             if(isError.value) {
                 clearTimeout(notifTimeOut.value)
-                topPosition.value = 64
+                topPosition.value = 62
                 notifTimeOut.value = setTimeout(() => {
                         topPosition.value = 0
                     }, 3000)

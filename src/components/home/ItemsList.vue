@@ -51,30 +51,41 @@
     })
     const sortedProducts = ref()
 
-    watch(() => store.state.auth.userData, async (newValue, oldValue) => {
-        await filterIsLike()
+    watch(products, (newValue, oldValue) => {
+        CheckListType()
+    })
+
+    watch(() => store.state.auth.userData, (newValue, oldValue) => {
+        // console.log('blud got new data')
+        CheckListType()
+        filterIsLike()
     })
 
     const displayedPrice = (price) => {return parseInt(price).toLocaleString('id-ID', { style: 'currency', currency: 'IDR',minimumFractionDigits: 0,maximumFractionDigits: 0 })}
 
     const filterIsLike = () => {
+        // console.log(sortedProducts.value)
         if (isLogin.value) {
             if (userLikedProduct.value.length > 0) {
-                products.value.forEach(product => {
+                sortedProducts.value.forEach(product => {
                     product.isLike = userLikedProduct.value.includes(product.id)
                 })
             } else {
-                products.value.forEach(product => {
+                sortedProducts.value.forEach(product => {
                     product.isLike = false
                 })
             }
+        } else {
+            sortedProducts.value.forEach(product => {
+                product.isLike = false
+            })
         }
     }
 
     const likeControl = async (productId) => {
         if (isLogin.value) {
             const UID = store.state.auth.userData.userId
-            products.value.forEach(async product => {
+            sortedProducts.value.forEach(async product => {
                 if (product.id === productId) {
                     product.isLike = !product.isLike
                     if (product.isLike === true) {
@@ -112,13 +123,17 @@
         }
     }
 
-    onMounted(async () => {
-        await filterIsLike()
+    const CheckListType = () => {
         if (props.listType === 'other') {
             sortedProducts.value = products.value.slice(0, 8)
         } else {
             sortedProducts.value = products.value
         }
+    }
+
+    onMounted( () => {
+        CheckListType()
+        filterIsLike()
     })
 </script>
 

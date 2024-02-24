@@ -97,5 +97,10 @@ export const routes = [
         beforeEnter: async (to, from, next) => {
             await checkAuth()? next() : next('/login')
         }
+    },
+    {path: '/:catchAll(.*)', name:"notFound", component: HomePage,
+        meta: {
+            layout: MainLayout
+        }
     }
 ]

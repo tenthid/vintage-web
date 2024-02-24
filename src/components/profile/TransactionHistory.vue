@@ -85,7 +85,7 @@
             router.push(`/cart?order=confirmation&rebuy=${key}`)
         } else {
             clearTimeout(notifTimeOut.value)
-            topPosition.value = 64
+            topPosition.value = 62
             notifTimeOut.value = setTimeout(() => {
                 topPosition.value = 0
             }, 3000)

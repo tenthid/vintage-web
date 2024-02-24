@@ -15,12 +15,12 @@
 <script setup>
     import ItemsList from './ItemsList.vue'
     import { useStore } from 'vuex';
-    import { onMounted, ref } from 'vue';
+    // import { onMounted, ref } from 'vue';
 
     const store = useStore()
 
     const products = store.state.product.products
-    const newProducts = products.slice().sort(function(a, b) {
+    const newProducts = products.slice().sort((a, b) => {
             return b.timeUploaded - a.timeUploaded;
         }).slice(0, 5)
 
