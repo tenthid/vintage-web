@@ -181,17 +181,16 @@
         if (item.quantity > 0) {
             cartItems.value[index].quantity = item.quantity
             await store.dispatch('cart/updateCartItems', cartItems.value)
+            orderItem.value = cartItems.value
         } else {
             removeItem(item.id)
-            await store.dispatch('cart/getCartItems')
         }
-        orderItem.value = cartItems.value
     }
-
+    
     const removeItem = async (itemId) => {
-        const UID = store.state.auth.userData.userId
+        // const UID = store.state.auth.userData.userId
         await store.dispatch('cart/updateCartItems', cartItems.value.filter(item => item.id !== itemId))
-        await store.dispatch('auth/getUser', UID)
+        orderItem.value = cartItems.value
     }
 
     const checkOrderType = async () => {

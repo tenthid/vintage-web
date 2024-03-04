@@ -84,8 +84,13 @@
             filterItems()
         } else {
             userLikedProduct.value = []
-            filteredList.value = []
-            productFound.value = false
+            if (typeParam.value === 'favorite') { 
+                productFound.value = false 
+                filteredList.value = []
+            } else {
+                filteredList.value = productList
+
+            }
         }
     })
 
