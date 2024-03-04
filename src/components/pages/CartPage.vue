@@ -183,7 +183,7 @@
             await store.dispatch('cart/updateCartItems', cartItems.value)
         } else {
             removeItem(item.id)
-            await store.dispatch('cart/updateCartItems', cartItems.value)
+            await store.dispatch('cart/getCartItems')
         }
         orderItem.value = cartItems.value
     }
