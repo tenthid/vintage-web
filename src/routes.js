@@ -10,6 +10,7 @@ import ProfileDetail from '@/components/profile/ProfileDetail.vue'
 import ResetPassword from './components/profile/ResetPassword.vue' 
 import TransactionHistory from './components/profile/TransactionHistory.vue'
 import CartPage from './components/pages/CartPage.vue'
+import NotfoundPage from './components/pages/NotfoundPage.vue'
 import { store } from './store/index'
 import Cookies from "js-cookie"
 
@@ -98,9 +99,9 @@ export const routes = [
             await checkAuth()? next() : next('/login')
         }
     },
-    {path: '/:catchAll(.*)', name:"notFound", component: HomePage,
+    {path: '/:catchAll(.*)', name:"notFound", component: NotfoundPage,
         meta: {
-            layout: MainLayout
+            layout: AuthLayout
         }
     }
 ]
